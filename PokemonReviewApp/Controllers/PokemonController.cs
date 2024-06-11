@@ -11,17 +11,14 @@ namespace PokemonReviewApp.Controllers;
 public class PokemonController : Controller
 {
     private readonly IPokemonRepository _pokemonRepository;
-    private readonly IOwnerRepository _ownerRepository;
     private readonly IReviewRepository _reviewRepository;
     private readonly IMapper _mapper;
 
     public PokemonController(IPokemonRepository pokemonRepository,
-        IOwnerRepository ownerRepository,
         IReviewRepository reviewRepository,
         IMapper mapper)
     {
         _pokemonRepository = pokemonRepository;
-        _ownerRepository = ownerRepository;
         _reviewRepository = reviewRepository;
         _mapper = mapper;
     }
@@ -81,9 +78,7 @@ public class PokemonController : Controller
         if (pokemonCreate == null)
             return BadRequest(ModelState);
 
-        var pokemon = _pokemonRepository
-            .GetPokemons()
-            .FirstOrDefault(c => c.Name.Trim().ToUpper() == pokemonCreate.Name.Trim().ToUpper());
+        var pokemon = _pokemonRepository.GetPokemonTrimToUpper(pokemonCreate);
         if (pokemon != null)
         {
             ModelState.AddModelError("", "Pokemon already exists");

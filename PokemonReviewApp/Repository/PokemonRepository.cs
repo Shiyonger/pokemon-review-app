@@ -1,4 +1,5 @@
 ﻿using PokemonReviewApp.Data;
+using PokemonReviewApp.Dto;
 using PokemonReviewApp.Interfaces;
 using PokemonReviewApp.Models;
 
@@ -26,6 +27,12 @@ public class PokemonRepository : IPokemonRepository
     public Pokemon GetPokemon(string name)
     {
         return _context.Pokemon.FirstOrDefault(p => p.Name == name);
+    }
+
+    public Pokemon GetPokemonTrimToUpper(PokemonDto pokemonDto)
+    {
+        return GetPokemons().FirstOrDefault(c => 
+            c.Name.Trim().ToUpper() == pokemonDto.Name.Trim().ToUpper());
     }
 
     public decimal GetPokemonRating(int pokeId)
@@ -58,11 +65,11 @@ public class PokemonRepository : IPokemonRepository
             Category = category,
             Pokemon = pokemon
         };
-        
+
         _context.Add(pokemonOwner);
         _context.Add(pokemonCategory);
         _context.Add(pokemon);
-        
+
         return Save();
     }
 
